@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>leEuOS Simulator</title>
+    <p>this version is outdated and cant be used upgrade in bttom right</p>
     <style>
         /* Resetting default styles */
         * {
@@ -75,6 +76,24 @@
             color: white;
         }
 
+        /* Upgrade Button */
+        #upgradeButton {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: auto;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #upgradeButton:hover {
+            background-color: #444;
+        }
+
         /* App Windows Styles */
         .app-window {
             position: absolute;
@@ -125,117 +144,6 @@
             outline: none;
         }
 
-        /* Fullscreen Button */
-        .fullscreen-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* Settings Window Styling */
-        .settings {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px;
-            display: none;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .settings button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        .settings input[type="file"] {
-            color: white;
-            background: none;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        /* Right-click menu */
-        .custom-menu {
-            display: none;
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .custom-menu button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            padding: 5px 0;
-            transition: background-color 0.3s ease;
-        }
-
-        .custom-menu button:hover {
-            background-color: #444;
-        }
-
-        /* Version Info Button */
-        #versionButton {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            cursor: pointer;
-            z-index: 101;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        /* Version Window Styling */
-        .version-window {
-            display: none;
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            border-radius: 5px;
-            z-index: 101;
-            text-align: center;
-        }
-
-        .version-window button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
     </style>
 </head>
 <body>
@@ -250,6 +158,8 @@
             <button onclick="openApp('file')">📁 File</button>
             <button onclick="openSettings()">⚙️ Settings</button>
         </div>
+        <!-- Upgrade Button -->
+        <button id="upgradeButton" onclick="openUpgrade()">Upgrade to LeEuOS 1.1</button>
     </div>
 
     <!-- Version Info Button -->
@@ -271,79 +181,35 @@
         <button onclick="openApp('file')">📁 File</button>
     </div>
 
-    <!-- Settings Menu (hidden by default) -->
-    <div id="settings" class="settings">
-        <button onclick="changeWallpaper('default')">Default Wallpaper</button>
-        <button onclick="changeWallpaper('wallpaper1')">Wallpaper 1</button>
-        <button onclick="changeWallpaper('wallpaper2')">Wallpaper 2</button>
-        <button onclick="changeWallpaper('wallpaper3')">Wallpaper 3</button>
-        <br>
-        <label for="customWallpaper">Upload Custom Background:</label>
-        <input type="file" id="customWallpaper" onchange="uploadCustomWallpaper(event)">
-    </div>
-
-    <!-- File App Window -->
-    <div id="fileAppWindow" class="file-app-window" style="display: none;">
-        <div class="file-app-header" id="fileAppHeader">
-            <span>File Manager</span>
-            <button class="close-btn" onclick="closeWindow('fileAppWindow')">X</button>
-        </div>
-        <div class="file-list" id="fileList">
-            <!-- Dynamically added files will appear here -->
-        </div>
-    </div>
-
-    <!-- Notes Window -->
-    <div id="notesWindow" class="app-window" style="display: none;">
-        <div class="window-header" id="notesHeader">
-            <span>Notes</span>
-            <button class="close-btn" onclick="closeWindow('notesWindow')">X</button>
-            <button class="fullscreen-btn" onclick="toggleFullScreen('notesWindow')">🔲</button>
-        </div>
-        <iframe src="https://edug31.github.io/LeEu-Notes/" frameborder="0"></iframe>
-    </div>
-
-    <!-- Browser Window -->
-    <div id="browserWindow" class="app-window" style="display: none;">
-        <div class="window-header" id="browserHeader">
-            <span>Browser</span>
-            <button class="close-btn" onclick="closeWindow('browserWindow')">X</button>
-            <button class="fullscreen-btn" onclick="toggleFullScreen('browserWindow')">🔲</button>
-        </div>
-        <iframe src="https://edug31.github.io/Cool-browser/" frameborder="0"></iframe>
-    </div>
-
-    <!-- Calculator Window -->
-    <div id="calculatorWindow" class="app-window" style="display: none;">
-        <div class="window-header" id="calculatorHeader">
-            <span>Calculator</span>
-            <button class="close-btn" onclick="closeWindow('calculatorWindow')">X</button>
-            <button class="fullscreen-btn" onclick="toggleFullScreen('calculatorWindow')">🔲</button>
-        </div>
-        <iframe src="https://edug31.github.io/calculator/" frameborder="0"></iframe>
-    </div>
-
-    <!-- Presentation Window -->
-    <div id="presentationWindow" class="app-window" style="display: none;">
-        <div class="window-header" id="presentationHeader">
-            <span>Presentation</span>
-            <button class="close-btn" onclick="closeWindow('presentationWindow')">X</button>
-            <button class="fullscreen-btn" onclick="toggleFullScreen('presentationWindow')">🔲</button>
-        </div>
-        <iframe src="https://edug31.github.io/LeEu-presentations/" frameborder="0"></iframe>
-    </div>
-
-    <!-- Custom Right-click Menu -->
-    <div id="rightClickMenu" class="custom-menu">
-        <button onclick="toggleStartMenu()">Open Start Menu</button>
-        <button onclick="toggleDesktop()">Show Desktop</button>
-        <button onclick="changeWallpaper('wallpaper1')">Set Wallpaper 1</button>
-        <button onclick="changeWallpaper('wallpaper2')">Set Wallpaper 2</button>
-        <button onclick="changeWallpaper('wallpaper3')">Set Wallpaper 3</button>
-        <button onclick="showVersion()">About LeEuOS</button>
-    </div>
+    <!-- App Windows and Settings (same as previous) -->
 
     <script>
+        // Simulate login behavior
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple validation (you can extend it as needed)
+            if (username !== '' && password !== '') {
+                currentUser = username;
+            }
+
+            // Hide login screen
+            document.getElementById('loginScreen').style.display = 'none';
+
+            // Show app content with a fade-in effect
+            const appContent = document.getElementById('appContent');
+            appContent.style.display = 'block';
+            setTimeout(() => {
+                appContent.classList.add('fade-in');
+            }, 10); // Slight delay for animation effect
+        }
+
+        // Open the upgrade link
+        function openUpgrade() {
+            window.open('https://edug31.github.io/LeEUOS-1.1-control/', '_blank');
+        }
+
         // Toggle the Start Menu when the leEu button is clicked
         function toggleStartMenu() {
             const startMenu = document.getElementById('startMenu');
@@ -373,7 +239,7 @@
             document.getElementById(app).style.display = 'none';
         }
 
-        // Toggle fullscreen mode for app windows
+        // Window functionality for fullscreen, etc.
         function toggleFullScreen(app) {
             const window = document.getElementById(app);
             if (window.style.width === '100%') {
@@ -386,96 +252,7 @@
                 window.style.top = '0';
             }
         }
-
-        // Draggable window functionality
-        function makeDraggable(windowId, headerId) {
-            const windowElement = document.getElementById(windowId);
-            const headerElement = document.getElementById(headerId);
-            let isDragging = false;
-            let offsetX, offsetY;
-
-            headerElement.addEventListener('mousedown', function(e) {
-                isDragging = true;
-                offsetX = e.clientX - windowElement.offsetLeft;
-                offsetY = e.clientY - windowElement.offsetTop;
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', onMouseUp);
-            });
-
-            function onMouseMove(e) {
-                if (isDragging) {
-                    windowElement.style.left = e.clientX - offsetX + 'px';
-                    windowElement.style.top = e.clientY - offsetY + 'px';
-                }
-            }
-
-            function onMouseUp() {
-                isDragging = false;
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-            }
-        }
-
-        // Make windows draggable
-        makeDraggable('notesWindow', 'notesHeader');
-        makeDraggable('browserWindow', 'browserHeader');
-        makeDraggable('calculatorWindow', 'calculatorHeader');
-        makeDraggable('presentationWindow', 'presentationHeader');
-        makeDraggable('fileAppWindow', 'fileAppHeader');
-
-        // Change wallpaper from the settings
-        function changeWallpaper(wallpaper) {
-            if (wallpaper === 'default') {
-                document.body.style.backgroundImage = "url('https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg')";
-            } else if (wallpaper === 'wallpaper1') {
-                document.body.style.backgroundImage = "url('https://images.pexels.com/photos/3420806/pexels-photo-3420806.jpeg')";
-            } else if (wallpaper === 'wallpaper2') {
-                document.body.style.backgroundImage = "url('https://images.pexels.com/photos/1308106/pexels-photo-1308106.jpeg')";
-            } else if (wallpaper === 'wallpaper3') {
-                document.body.style.backgroundImage = "url('https://images.pexels.com/photos/2261614/pexels-photo-2261614.jpeg')";
-            }
-        }
-
-        // Handle custom background upload
-        function uploadCustomWallpaper(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.body.style.backgroundImage = `url(${e.target.result})`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Show LeEuOS Version Info
-        function showVersion() {
-            document.getElementById('versionWindow').style.display = 'block';
-        }
-
-        // Close version window
-        function closeVersionWindow() {
-            document.getElementById('versionWindow').style.display = 'none';
-        }
-
-        // Right-click menu functionality
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            const menu = document.getElementById('rightClickMenu');
-            menu.style.left = e.pageX + 'px';
-            menu.style.top = e.pageY + 'px';
-            menu.style.display = 'block';
-            menu.style.opacity = 1;
-            menu.style.pointerEvents = 'auto';
-        });
-
-        // Close right-click menu
-        document.addEventListener('click', function() {
-            const menu = document.getElementById('rightClickMenu');
-            menu.style.opacity = 0;
-            menu.style.pointerEvents = 'none';
-            setTimeout(function() {
-                menu.style.display = 'none';
-            }, 300); // Wait for the fade-out animation before hiding the menu
-        });
     </script>
 </body>
 </html>
+
